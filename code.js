@@ -1,56 +1,70 @@
 const cards = document.querySelectorAll('.memory-card');
-cards.forEach(card => card.addEventListener('click' ,flipcard));
-let hasflippedcard = false ;
-let firstcard , secondcard ;
-let lockboard =false ;
+cards.forEach(card => card.addEventListener('click', flipcard));
+let hasflippedcard = false;
+let firstcard, secondcard;
+let lockboard = false;
 
-function flipcard(){
-  if(lockboard) return ;
-  if(this === firstcard)
-  return ;
+function flipcard() {
+  if (lockboard) return;
+  if (this === firstcard)
+    return;
   this.classList.add('flip');
-  if(!hasflippedcard){
-    hasflippedcard =true ;
-    firstcard =this  ;
-  }else{
-    hasflippedcard =false ;
-    secondcard =this ;
-   checkformatch()
+  if (!hasflippedcard) {
+    hasflippedcard = true;
+    firstcard = this;
+  } else {
+    hasflippedcard = false;
+    secondcard = this;
+    checkformatch()
   }
 }
 
-function checkformatch(){
-  if(firstcard.dataset.image === secondcard.dataset.image){
-    firstcard.removeEventListener('click' ,flipcard);
-    secondcard.removeEventListener('click' ,flipcard);
-  }else{
+function checkformatch() {
+  if (firstcard.dataset.image === secondcard.dataset.image) {
+    firstcard.removeEventListener('click', flipcard);
+    secondcard.removeEventListener('click', flipcard);
+  } else {
     setTimeout(() => {
       firstcard.classList.remove('flip');
-    secondcard.classList.remove('flip');
+      secondcard.classList.remove('flip');
     }, 1000);
-    
+
   }
 }
-function checkformatch(){
-  let ismatch  =firstcard.dataset.image === secondcard.dataset.image ;
+let count = 0
+
+function checkformatch() {
+  let ismatch = firstcard.dataset.image === secondcard.dataset.image;
+
   ismatch ? match() : notmatch()
 
 }
-function match(){
-  firstcard.removeEventListener('click' ,flipcard);
-    secondcard.removeEventListener('click' ,flipcard);
+
+function match() {
+  firstcard.removeEventListener('click', flipcard);
+  secondcard.removeEventListener('click', flipcard);
+
+  console.log(count++)
+  if(count===6){
+    win()
+  }
 }
-function notmatch(){
-  lockboard =true ;
+
+function win(){
+  console.log('win')
+}
+
+function notmatch() {
+  lockboard = true;
   setTimeout(() => {
     firstcard.classList.remove('flip');
-  secondcard.classList.remove('flip');
-  lockboard =false;
+    secondcard.classList.remove('flip');
+    lockboard = false;
   }, 1000);
 }
-(function randomise(){
-cards.forEach(i => {
-  let randpos =Math.floor(Math.random()*12);
-  i.style.order =randpos ;
-})
+(function randomise() {
+  cards.forEach(i => {
+    let randpos = Math.floor(Math.random() * 12);
+    i.style.order = randpos;
+  })
 })()
